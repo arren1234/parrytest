@@ -13,8 +13,11 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Player, function (sprite, ot
         sprite.setVelocity(500, 0)
         sprite.setImage(assets.image`bulletR`)
     } else {
+        iFrame = true
         info.changeLifeBy(-1)
         sprites.destroy(sprite)
+        pause(200)
+        iFrame = false
     }
 })
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Projectile, function (sprite, otherSprite) {
@@ -32,7 +35,9 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, oth
 let projectile: Sprite = null
 let parryOpen = false
 let parry = false
+let iFrame = false
 info.setScore(0)
+iFrame = false
 parry = false
 parryOpen = true
 scene.setBackgroundColor(8)
@@ -44,13 +49,18 @@ controller.moveSprite(gooddie, 0, 100)
 gooddie.setStayInScreen(true)
 info.setLife(3)
 game.onUpdate(function () {
-    if (parry) {
-        gooddie.setImage(assets.image`goodieParry`)
+    if (iFrame) {
+        scene.setBackgroundColor(2)
     } else {
-        if (parryOpen) {
-            gooddie.setImage(assets.image`goodie`)
+        if (parry) {
+            scene.setBackgroundColor(9)
         } else {
-            gooddie.setImage(assets.image`goodieTired`)
+            if (parryOpen) {
+                gooddie.setImage(assets.image`goodie`)
+            } else {
+                gooddie.setImage(assets.image`goodieTired`)
+            }
+            scene.setBackgroundColor(8)
         }
     }
 })
